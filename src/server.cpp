@@ -1,7 +1,4 @@
 #include <asio.hpp>
-#include <asio/error.hpp>
-#include <asio/ip/address.hpp>
-#include <asio/ip/tcp.hpp>
 #include <format>
 #include <memory>
 #include <print>
@@ -64,7 +61,7 @@ asio::awaitable<void> server::serve(std::shared_ptr<socks::socks_connection> con
             );
             co_return;
         }
-        tcp::endpoint endpoint;
+        std::shared_ptr remote_socket_ptr = std::make_shared<tcp::socket>(io_context);
         if (request.address_type == socks_spec::address_type::DOMAIN) {
             tcp::resolver resolver(io_context);
             tcp::resolver::results_type endpoints = co_await resolver.async_resolve(
@@ -72,15 +69,15 @@ asio::awaitable<void> server::serve(std::shared_ptr<socks::socks_connection> con
                 std::to_string(request.destination_port),
                 asio::use_awaitable
             );
-        endpoint = endpoints->endpoint();
+            co_await asio::async_connect(*remote_socket_ptr,endpoints,asio::use_awaitable);
         } else {
-            endpoint = tcp::endpoint(asio::ip::make_address(request.destination_address),request.destination_port);
+            tcp::endpoint endpoint = tcp::endpoint(asio::ip::make_address(request.destination_address),request.destination_port);
+            co_await remote_socket_ptr->async_connect(
+                endpoint,
+                asio::use_awaitable);
         }
-        std::shared_ptr remote_socket_ptr = std::make_shared<tcp::socket>(io_context);
-        asio::error_code connect_error;
         socks_spec::reply_code reply_code = socks_spec::reply_code::SUCCEEDED;
         try {
-            co_await remote_socket_ptr->async_connect(endpoint,asio::use_awaitable);
         } catch (const asio::system_error& error) {
             switch (error.code().value()) {
                 case asio::error::connection_refused: {         
