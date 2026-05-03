@@ -38,6 +38,9 @@ class simple_logger {
 
         template <typename... Args>
         inline void log(log_level level,std::format_string<Args...> message, Args &&...args) {
+            if (level < default_log_level) {
+                return;
+            }
             std::ostream& out = level > log_level::warn ? std::cerr : std::cout;
             std::println(out,"\r{} {}", make_base_(level),std::format(std::move(message),std::forward<Args>(args)...));
         }

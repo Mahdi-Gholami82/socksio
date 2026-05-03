@@ -7,7 +7,7 @@
 using asio::ip::tcp;
 
 int main(int argc, char* argv[]) {
-    
+    logger.set_log_level(log_level::info);
     asio::io_context io_context;
     asio::signal_set signals(io_context, SIGINT, SIGTERM);
     signals.async_wait([&](auto, int signal){ 
