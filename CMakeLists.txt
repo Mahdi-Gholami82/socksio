@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.31.6)
 
-project(socksc VERSION 0.1 LANGUAGES CXX)
+project(socksio VERSION 0.1 LANGUAGES CXX)
 
 # export compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

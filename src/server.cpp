@@ -26,6 +26,11 @@ void server::async_start() {
     acceptor_.bind(endpoint);
     acceptor_.listen();
     asio::co_spawn(io_context,listen(),asio::detached);
+    asio::ip::address address = endpoint.address();
+    std::string address_string = address.to_string();
+    logger.info("Listening on {} port {}",
+                address.is_v6() ? std::format("[{}]", address_string): address_string,
+                endpoint.port());
 }
 
 asio::awaitable<void> server::listen() {
