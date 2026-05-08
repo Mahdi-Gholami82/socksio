@@ -20,16 +20,12 @@ namespace socks {
     asio::awaitable<request> read_request(std::shared_ptr<tcp_connection> connection);
     asio::awaitable<handshake_result> do_initial_handshake(std::shared_ptr<tcp_connection> connection);
 
-    class socks_connection : public tcp_connection, std::enable_shared_from_this<socks_connection> {
+    class socks_connection : public tcp_connection {
         public:
             socks_connection(asio::io_context& io_context, tcp::endpoint endpoint) : tcp_connection(io_context,endpoint) {}
             asio::awaitable<handshake_result> do_initial_handshake();
             asio::awaitable<void> write_method_selection(socks_spec::method method);
             asio::awaitable<request> read_request();
-
-        private:
-            asio::awaitable<void> relay_client_write_(std::shared_ptr<tcp::socket> remote_socket_ptr);
-            asio::awaitable<void> relay_client_read_(std::shared_ptr<tcp::socket> remote_socket_ptr);
     };
 
     struct handshake_result {
