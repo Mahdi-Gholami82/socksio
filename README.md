@@ -1,6 +1,6 @@
-# SOCKS Server
+# Socksio
 
-Simple SOCKS5 proxy server implementation using ASIO and C++23.
+Asynchronous SOCKS5 proxy server implementation compatible with RFC-1928.
 
 > Note: Currently supports only SOCKS version 5, CONNECT
 command, and no authentication.
@@ -12,6 +12,15 @@ cmake --build build
 ```
 
 ### Usage
-```shell
-socksio --addr 127.0.0.1 --port 1080
+```
+Usage: socksio [options]
+Options:
+        -h, --help
+                Show this help message and exit
+        -p, --port
+                Listen port number, Default: 1080
+        -a, --addr
+                Listen address, Default: 127.0.0.1
+        -l, --log-level
+                Logging level, Default: info (debug|info|warn|error|critical)
 ```

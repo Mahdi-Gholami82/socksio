@@ -2,21 +2,16 @@
 #include <chrono>
 #include "logger.hpp"
 
+const std::map<log_level, std::string> log_names = {
+        {log_level::debug,    "debug"},
+        {log_level::info,     "info"},
+        {log_level::warn,     "warn"},
+        {log_level::error,    "error"},
+        {log_level::critical, "critical"}
+};
+
 const std::string get_log_name(log_level level) {
-    switch (level) {
-    case log_level::debug:
-        return "debug";
-    case log_level::info:
-        return "info";
-    case log_level::warn:
-        return "warn";
-    case log_level::error:
-        return "error";
-    case log_level::critical:
-        return "critical";
-    default:
-        return "";
-    }
+    return log_names.at(level);
 }
 
 constexpr std::string colors::from_log_level(log_level level) noexcept {

@@ -2,12 +2,14 @@
 
 #include <format>
 #include <iostream>
+#include <map>
 #include <print>
 #include <ostream>
 #include <string>
 #include <utility>
 
 using std::println;
+
 
 enum class log_level {
     debug,
@@ -16,6 +18,8 @@ enum class log_level {
     error,
     critical
 };
+
+extern const std::map<log_level, std::string> log_names;
 
 const std::string get_log_name(log_level level);
 
@@ -64,6 +68,14 @@ class simple_logger {
         template<typename ...Args>
         inline void critical(std::format_string<Args...> message, Args&&... args) {
             log(log_level::critical,std::move(message),std::forward<Args>(args)...);
+        }
+        template<typename ...Args>
+        inline void raw(std::format_string<Args...> message, Args&&... args) {
+            println(std::cout,std::move(message),std::forward<Args>(args)...);
+        }
+        template<typename ...Args>
+        inline void raw_err(std::format_string<Args...> message, Args&&... args) {
+            println(std::cerr,std::move(message),std::forward<Args>(args)...);
         }
 
     private:
