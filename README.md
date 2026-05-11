@@ -20,7 +20,7 @@ Options:
         -p, --port
                 Listen port number, Default: 1080
         -a, --addr
-                Listen address, Default: 127.0.0.1
+                Listen address, Default: 0.0.0.0
         -l, --log-level
                 Logging level, Default: info (debug|info|warn|error|critical)
 ```
