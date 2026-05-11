@@ -6,7 +6,7 @@
 #include <string>
 #include <utility>
 
-#include "arguments_parser.hpp"
+#include "argument_parser.hpp"
 #include "server.hpp"
 #include "logger.hpp"
 
@@ -90,7 +90,7 @@ int main(int argc, char* argv[]) {
         
         logger.raw_err("invalid value for {} \n{}",error.target_argument,args.get_help());
         return 1;
-    } catch (argp::arguments_validation_error& error) {
+    } catch (argp::argument_validation_error& error) {
         std::string error_text = "invalid arguments :\n";
         for (const std::string& element : error.invalid_arguments) {
             error_text += element + " ";

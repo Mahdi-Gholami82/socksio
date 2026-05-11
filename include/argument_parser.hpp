@@ -20,9 +20,9 @@ namespace argp {
     class argument;
     inline size_t get_argument_hash(const argp::argument& arg);
 
-    class arguments_validation_error : public std::runtime_error {
+    class argument_validation_error : public std::runtime_error {
     public:
-      arguments_validation_error(
+      argument_validation_error(
           const std::string &message,
           const std::vector<std::string> invalid_arguments)
           : std::runtime_error(message),
@@ -64,18 +64,15 @@ namespace argp {
 
 
     namespace {
-        template<typename Tp, typename Up>
-        concept is_same_p = std::is_same_v<std::remove_cv_t<Tp>, Up>;
 
         template<typename T>
         concept is_num = 
-            is_same_p<T, int> ||
-            is_same_p<T, long> ||
-            is_same_p<T, long long> ||
-            is_same_p<T, float> ||
-            is_same_p<T, double> ||
-            is_same_p<T, long double> ||
-            is_same_p<T, bool>;
+            std::is_same_v<T, int> ||
+            std::is_same_v<T, long> ||
+            std::is_same_v<T, long long> ||
+            std::is_same_v<T, float> ||
+            std::is_same_v<T, double> ||
+            std::is_same_v<T, long double>;
 
         template<typename T>
         concept is_argument = std::is_same_v<T, std::string> || is_num<T>;
@@ -90,30 +87,30 @@ namespace argp {
         /// used to convert string to number
         template<typename NumType>
         requires is_num<NumType>
-        NumType to_integral_value_(std::string& text, size_t* idx,int base) = delete;
+        NumType to_numeric_value_(std::string& text, size_t* idx,int base) = delete;
         
         template<>
-        int to_integral_value_<int>(std::string& text, size_t* idx,int base) {
+        int to_numeric_value_<int>(std::string& text, size_t* idx,int base) {
             return std::stoi(text,idx,base);
         }        
         template<>
-        long to_integral_value_<long>(std::string& text, size_t* idx,int base) {
+        long to_numeric_value_<long>(std::string& text, size_t* idx,int base) {
             return std::stol(text,idx,base);
         }        
         template<>
-        long long to_integral_value_<long long>(std::string& text, size_t* idx,int base) {
+        long long to_numeric_value_<long long>(std::string& text, size_t* idx,int base) {
             return std::stoll(text,idx,base);
         }        
         template<>
-        float to_integral_value_<float>(std::string& text, size_t* idx,int base) {
+        float to_numeric_value_<float>(std::string& text, size_t* idx,int base) {
             return std::stof(text,idx);
         }        
         template<>
-        double to_integral_value_<double>(std::string& text, size_t* idx,int base) {
+        double to_numeric_value_<double>(std::string& text, size_t* idx,int base) {
             return std::stod(text,idx);
         }
         template<>
-        long double to_integral_value_<long double>(std::string& text, size_t* idx,int base) {
+        long double to_numeric_value_<long double>(std::string& text, size_t* idx,int base) {
             return std::stold(text,idx);
         }
 
@@ -121,7 +118,7 @@ namespace argp {
         requires is_num<NumType>
         NumType to_integral_(std::string text,int base = 10) {
             size_t index;
-            NumType result = to_integral_value_<NumType>(text,&index,base);
+            NumType result = to_numeric_value_<NumType>(text,&index,base);
             if (index != text.length()) {
                 throw std::logic_error("argument is not pure integral value");
             }
@@ -209,7 +206,7 @@ namespace argp {
             /// Checks if there are no arguments that havent been parsed
             void validate() {
                 if (!values.empty()) {
-                    throw arguments_validation_error("Invalid arguments",values);
+                    throw argument_validation_error("Invalid arguments",values);
                 }
             }
     };
@@ -254,6 +251,7 @@ namespace argp {
                 for (auto& job : jobs_) {
                     job();
                 }
+                jobs_.clear();
             }
 
         protected:
