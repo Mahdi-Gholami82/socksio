@@ -69,6 +69,7 @@ asio::awaitable<void> server::serve(std::shared_ptr<socks::socks_connection> con
         std::shared_ptr remote_socket_ptr = std::make_shared<tcp::socket>(io_context);
         if (request.address_type == socks_spec::address_type::DOMAIN) {
             tcp::resolver resolver(io_context);
+            logger.debug("resolving {}", request.destination_address);
             tcp::resolver::results_type endpoints = co_await resolver.async_resolve(
                 request.destination_address,
                 std::to_string(request.destination_port),

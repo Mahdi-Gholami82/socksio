@@ -57,6 +57,7 @@ namespace socks {
                 uint8_t domain_lenght;
                 co_await read_bytes(asio::buffer(&domain_lenght,sizeof(domain_lenght)));
                 std::string domain_buffer;
+                domain_buffer.resize(domain_lenght);
                 co_await read_bytes(asio::buffer(domain_buffer,domain_lenght));
                 destination_address = domain_buffer;
                 break;
