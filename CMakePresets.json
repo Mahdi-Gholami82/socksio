@@ -1,0 +1,183 @@
+{
+  "version": 10,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 31,
+    "patch": 6
+  },
+  "configurePresets": [
+    {
+      "name": "user-generic",
+      "displayName": "Generic Build",
+      "description": "Generic preset for other builds",
+      "generator": "Ninja",
+      "hidden": true
+    },
+    {
+      "name": "build-debug",
+      "displayName": "Build Debug",
+      "description": "Build for user in debug",
+      "inherits": "user-generic",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": true
+      }
+    },
+    {
+      "name": "build-release",
+      "displayName": "Build Release",
+      "description": "Build for user in release",
+      "inherits": "user-generic",
+      "binaryDir": "${sourceDir}/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "ci-generic",
+      "displayName": "Generic CI Build",
+      "description": "Generic CI preset for other builds",
+      "generator": "Ninja",
+      "hidden": true,
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "FETCHCONTENT_BASE_DIR": "${sourceDir}/out/build/_deps"
+      }
+    },
+    {
+      "name": "ci-generic-mingw",
+      "displayName": "Generic CI Build Mingw",
+      "description": "Generic CI preset for other Mingw builds",
+      "generator": "Ninja",
+      "hidden": true,
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "FETCHCONTENT_BASE_DIR": "${sourceDir}/out/build/_deps",
+        "CMAKE_SYSTEM_NAME": "Windows"
+      }
+    },
+    {
+      "name": "ci-linux-x64",
+      "displayName": "CI Build Linux x64",
+      "description": "CI Build for linux arch x64",
+      "inherits": "ci-generic",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "g++"
+      }
+    },
+    {
+      "name": "ci-linux-x86",
+      "displayName": "CI Build Linux x86",
+      "description": "CI Build for linux arch x86",
+      "inherits": "ci-generic",
+      "architecture": {
+        "value": "x86",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "i686-linux-gnu-g++"
+      }
+    },
+    {
+      "name": "ci-linux-arm32",
+      "displayName": "CI Build Linux ARM",
+      "description": "CI Build for linux arch ARM",
+      "inherits": "ci-generic",
+      "architecture": {
+        "value": "ARM",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "arm-linux-gnueabihf-g++"
+      }
+    },
+    {
+      "name": "ci-linux-arm64",
+      "displayName": "CI Build Linux ARM64",
+      "description": "CI Build for linux arch ARM64",
+      "inherits": "ci-generic",
+      "architecture": {
+        "value": "ARM64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "aarch64-linux-gnu-g++"
+      }
+    },
+    {
+      "name": "ci-mingw-x64",
+      "displayName": "CI Build MinGW x64",
+      "description": "CI Build for Windows using MinGW64",
+      "inherits": "ci-generic-mingw",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "x86_64-w64-mingw32-g++-posix"
+      }
+    },
+    {
+      "name": "ci-mingw-x86",
+      "displayName": "CI Build MinGW x86",
+      "description": "CI Build for Windows using MinGW64",
+      "inherits": "ci-generic-mingw",
+      "architecture": {
+        "value": "x86",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "i686-w64-mingw32-g++-posix"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "build-debug",
+      "configurePreset": "build-debug",
+      "displayName": "Build Debug"
+    },
+    {
+      "name": "build-release",
+      "configurePreset": "build-release",
+      "displayName": "Build Release"
+    },
+    {
+      "name": "ci-linux-x64",
+      "configurePreset": "ci-linux-x64",
+      "displayName": "CI Build Linux x64"
+    },
+    {
+      "name": "ci-linux-x86",
+      "configurePreset": "ci-linux-x86",
+      "displayName": "CI Build Linux x86"
+    },
+    {
+      "name": "ci-linux-arm32",
+      "configurePreset": "ci-linux-arm32",
+      "displayName": "CI Build Linux ARM32"
+    },
+    {
+      "name": "ci-linux-arm64",
+      "configurePreset": "ci-linux-arm64",
+      "displayName": "CI Build Linux ARM64"
+    },
+    {
+      "name": "ci-mingw-x64",
+      "configurePreset": "ci-mingw-x64",
+      "displayName": "CI Build Windows x64"
+    },
+    {
+      "name": "ci-mingw-x86",
+      "configurePreset": "ci-mingw-x86",
+      "displayName": "CI Build Windows x86"
+    }
+  ]
+}

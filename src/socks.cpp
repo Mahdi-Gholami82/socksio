@@ -4,7 +4,6 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
-#include <print>
 
 #include "socks_spec.hpp"
 #include "socks.hpp"
@@ -142,7 +141,6 @@ namespace socks {
         std::string address = destination_address;
         if (address_type == socks_spec::address_type::IPV6) {
             address = '[' + address + ']';
-            std::println("{}",destination_address);
         }
         text += std::format(" {}:{}",address,destination_port);
         return text;

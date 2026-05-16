@@ -1,2 +1,5 @@
 .cache
 build/
+build-release/
+out/
+CMakeUserPresets.json
