@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <asio.hpp>
 #include <asio/ip/address.hpp>
+#include <exception>
 #include <optional>
 #include <string>
 #include <utility>
@@ -33,7 +34,7 @@ class args : public argp::args_template {
         argp::result<bool> show_help = false;
 
         std::string get_help() {
-            return std::format("Usage: socksio [options]\nOptions:\n{}",
+            return std::format("Usage: socksd [options]\nOptions:\n{}",
                 manager_.generate_help());
         }
     private:
@@ -87,16 +88,20 @@ int main(int argc, char* argv[]) {
         io_context.run();
     } catch (argp::invalid_argument_value& error) {
         
-        logger.raw_err("invalid value for {} \n{}",error.target_argument,args.get_help());
+        logger.raw_err("Invalid value for {} \n{}",error.target_argument,args.get_help());
         return 1;
     } catch (argp::argument_validation_error& error) {
-        std::string error_text = "invalid arguments :\n";
+        std::string error_text = "Invalid arguments :\n";
         for (const std::string& element : error.invalid_arguments) {
             error_text += element + " ";
         }
         error_text += std::format("\n\n{}",args.get_help());
         logger.raw_err("{}", error_text);
         return 1;
+    } catch (const std::exception& error) {
+        logger.critical("Exception : {}",error.what());
+    } catch (...) {
+        logger.critical("Unknown exception");
     }
     return 0;
 }

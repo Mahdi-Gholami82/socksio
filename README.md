@@ -1,4 +1,4 @@
-# Socksio
+# Socksd
 
 Asynchronous SOCKS5 proxy server implementation compatible with RFC-1928.
 
@@ -6,14 +6,14 @@ Asynchronous SOCKS5 proxy server implementation compatible with RFC-1928.
 command, and no authentication.
 
 ### Build
-```shell
+```sh
 cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
 cmake --build build
 ```
 
 ### Usage
 ```
-Usage: socksio [options]
+Usage: socksd [options]
 Options:
         -h, --help
                 Show this help message and exit
