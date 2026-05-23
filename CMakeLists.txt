@@ -22,6 +22,7 @@ FetchContent_Declare(
   GIT_REPOSITORY "https://github.com/chriskohlhoff/asio.git"
   GIT_TAG        "asio-1-38-0"
   GIT_SHALLOW TRUE
+  GIT_PROGRESS TRUE
 )
 FetchContent_MakeAvailable(asio)
 
@@ -32,7 +33,7 @@ target_compile_features(asio INTERFACE cxx_std_20)
 target_include_directories(asio SYSTEM INTERFACE "${ASIO_INCLUDE_DIR}")
 
 
-file(GLOB SRC_FILES "src/*.cpp")
+file(GLOB SRC_FILES CONFIGURE_DEPENDS "src/*.cpp")
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 target_link_libraries(${PROJECT_NAME} PRIVATE asio)
 target_include_directories(${PROJECT_NAME} PRIVATE include)
